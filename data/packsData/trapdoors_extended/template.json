@@ -13,7 +13,7 @@
     "###"
   ],
   "result": {
-    "count": 3,
+    "count": COUNT,
     "item": "minecraft:OUTPUT"
   }
 }
