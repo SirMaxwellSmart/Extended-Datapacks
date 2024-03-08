@@ -1,15 +1,17 @@
 {
-    "type": "minecraft:crafting_shapeless",
-    "category": "building",
-    "ingredients": [
-      {
-        "item": "minecraft:INPUT"
-      },
-      {
-        "item": "minecraft:INPUT"
-      }
-    ],
-    "result": {
-      "item": "minecraft:OUTPUT"
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "GROUP",
+  "ingredients": [
+    {
+      "item": "minecraft:INPUT"
+    },
+    {
+      "item": "minecraft:INPUT"
+    }
+  ],
+  "result": {
+    "count": COUNT,
+    "item": "minecraft:OUTPUT"
   }
 }
