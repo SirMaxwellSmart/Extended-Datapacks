@@ -58,6 +58,7 @@ deepslate_tiles,cobbled_deepslate
 deepslate_tile_slab,cobbled_deepslate
 deepslate_tile_stairs,cobbled_deepslate
 deepslate_tile_wall,cobbled_deepslate
+chiseled_deepslate,cobbled_deepslate
 tuff,tuff
 tuff_slab,tuff
 tuff_stairs,tuff
