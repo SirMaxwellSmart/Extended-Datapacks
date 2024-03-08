@@ -281,16 +281,16 @@ def packTransfer(namespace):
 
     else:
         datapackRecipes = os.listdir("data/genData/" + namespace)
-        os.makedirs("data/outData/" + datapack + "/minecraft/recipes", exist_ok=True)
-        os.makedirs("data/outData/" + datapack + "/" + namespace + "/recipes", exist_ok=True)
+        os.makedirs("data/outData/" + datapack + "/data/minecraft/recipes", exist_ok=True)
+        os.makedirs("data/outData/" + datapack + "/data/" + namespace + "/recipes", exist_ok=True)
 
         for recipe in datapackRecipes:
             # vprint("Namespace:", namespace, "Datapack:", datapack, "Recipe:", recipe)
 
             if recipe in mcRecipes:
-                shutil.copy("data/genData/" + namespace + "/" + recipe, "data/outData/" + datapack + "/minecraft/recipes")
+                shutil.copy("data/genData/" + namespace + "/" + recipe, "data/outData/" + datapack + "/data/minecraft/recipes")
             else:
-                shutil.copy("data/genData/" + namespace + "/" + recipe, "data/outData/" + datapack + "/" + namespace + "/recipes")
+                shutil.copy("data/genData/" + namespace + "/" + recipe, "data/outData/" + datapack + "/data/" + namespace + "/recipes")
 
 Setup()
 print("---------  Complete!  ---------")
