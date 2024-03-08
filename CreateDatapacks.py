@@ -189,6 +189,7 @@ def smeltingGen(datapack):
             tempRecipe = tempRecipe.replace("GROUP", row["group"])
             tempRecipe = tempRecipe.replace("TIME", row["time"])
             tempRecipe = tempRecipe.replace("EXP", row["exp"])
+            tempRecipe = tempRecipe.replace("TYPE", "smelting")
 
             with open("data/genData/" + datapack + "/" + row["output"] + "_from_smelting_" + row["input"] + ".json", 'w') as recipe:
                 recipe.write(tempRecipe)
@@ -201,6 +202,7 @@ def smeltingGen(datapack):
             tempRecipe = tempRecipe.replace("GROUP", row["group"])
             tempRecipe = tempRecipe.replace("TIME", str(int(row["time"]) / 2))
             tempRecipe = tempRecipe.replace("EXP", row["exp"])
+            tempRecipe = tempRecipe.replace("TYPE", "blasting")
 
             with open("data/genData/" + datapack + "/" + row["output"] + "_from_blasting_" + row["input"] + ".json", 'w') as recipe:
                 recipe.write(tempRecipe)
@@ -213,6 +215,7 @@ def smeltingGen(datapack):
             tempRecipe = tempRecipe.replace("GROUP", row["group"])
             tempRecipe = tempRecipe.replace("TIME", str(int(row["time"]) * 3))
             tempRecipe = tempRecipe.replace("EXP", 0)
+            tempRecipe = tempRecipe.replace("TYPE", "campfire_cooking")
 
             with open("data/genData/" + datapack + "/" + row["output"] + "_from_campfire_cooking_" + row["input"] + ".json", 'w') as recipe:
                 recipe.write(tempRecipe)
@@ -225,6 +228,7 @@ def smeltingGen(datapack):
             tempRecipe = tempRecipe.replace("GROUP", row["group"])
             tempRecipe = tempRecipe.replace("TIME", str(int(row["time"]) / 2))
             tempRecipe = tempRecipe.replace("EXP", row["exp"])
+            tempRecipe = tempRecipe.replace("TYPE", "smoking")
 
             with open("data/genData/" + datapack + "/" + row["output"] + "_from_smoking_" + row["input"] + ".json", 'w') as recipe:
                 recipe.write(tempRecipe)
