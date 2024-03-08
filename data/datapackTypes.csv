@@ -1,0 +1,15 @@
+datapack,type
+carpets_extended,crafting
+doors_extended,crafting
+hanging_signs_extended,crafting
+husk_sand_extended,direct_copy
+misc_crafting_extended,direct_copy
+signs_extended,crafting
+silverfish_gravel_extended,direct_copy
+slabs_extended,uncrafting
+smelt_raw_extended,smelting
+stairs_extended,crafting
+stonecutting_extended,stonecutting
+trapdoors_extended,crafting
+uncrafting_extended,uncrafting
+woodcutting_extended,stonecutting

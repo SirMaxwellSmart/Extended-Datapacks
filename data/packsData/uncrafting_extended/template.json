@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "GROUP",
+  "ingredients": [
+    {
+      "item": "minecraft:INPUT"
+    }
+  ],
+  "result": {
+    "count": COUNT,
+    "item": "minecraft:OUTPUT"
+  }
+}

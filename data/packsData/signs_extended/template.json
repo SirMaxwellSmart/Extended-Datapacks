@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "GROUP",
+  "key": {
+    "#": {
+      "item": "minecraft:INPUT"
+    },
+    "X": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "###",
+    "###",
+    " X "
+  ],
+  "result": {
+    "count": COUNT,
+    "item": "minecraft:OUTPUT"
+  }
+}

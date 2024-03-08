@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "GROUP",
+  "key": {
+    "#": {
+      "item": "minecraft:INPUT"
+    }
+  },
+  "pattern": [
+    "##",
+    "##",
+    "##"
+  ],
+  "result": {
+    "count": COUNT,
+    "item": "minecraft:OUTPUT"
+  }
+}

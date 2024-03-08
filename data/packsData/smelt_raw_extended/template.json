@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:TYPE",
+  "category": "misc",
+  "cookingtime": TIME,
+  "experience": EXP,
+  "group": "GROUP",
+  "ingredient": {
+    "item": "minecraft:INPUT"
+  },
+  "result": "minecraft:OUTPUT"
+}

@@ -1,0 +1,4 @@
+output,input,group,time,exp,smeltTypes
+iron_block,raw_iron_block,raw_iron_block,1800,5.04,f b
+copper_block,raw_copper_block,raw_copper_block,1800,5.04,f b
+gold_block,raw_gold_block,raw_gold_block,1800,5.04,f b
