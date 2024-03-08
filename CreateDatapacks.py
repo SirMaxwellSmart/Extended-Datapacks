@@ -277,7 +277,7 @@ def packTransfer(namespace):
         datapack = "extended_combined"
 
     if namespace in directCopyPacks:
-        shutil.copytree("data/packsData/" + namespace, "data/outData/" + datapack + "/minecraft", dirs_exist_ok = True)
+        shutil.copytree("data/packsData/" + namespace, "data/outData/" + datapack + "/data/minecraft", dirs_exist_ok = True)
 
     else:
         datapackRecipes = os.listdir("data/genData/" + namespace)
