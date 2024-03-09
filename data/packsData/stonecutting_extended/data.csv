@@ -133,6 +133,8 @@ polished_blackstone_bricks,blackstone
 polished_blackstone_brick_slab,blackstone
 polished_blackstone_brick_stairs,blackstone
 polished_blackstone_brick_wall,blackstone
+basalt,basalt
+polished_basalt,basalt
 end_stone_bricks,end_stone_bricks
 end_stone_brick_slab,end_stone_bricks
 end_stone_brick_stairs,end_stone_bricks
