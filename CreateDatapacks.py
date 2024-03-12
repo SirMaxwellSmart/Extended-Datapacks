@@ -4,7 +4,6 @@ import os
 import shutil
 import sys
 
-# Set CWD to that of the script
 os.chdir(os.path.dirname(os.path.realpath(__file__))) 
 
 def Setup():
