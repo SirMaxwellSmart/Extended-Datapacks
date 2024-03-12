@@ -9,8 +9,8 @@ os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
 def Setup():
     global mcRecipes
-    with open("data/mcrecipes.txt") as mcRecipesFile:
-        mcRecipes = mcRecipesFile.read()
+    with open("data/mcRecipes.txt") as mcRecipesFile:
+        mcRecipes = mcRecipesFile.read().split('\n')
     
 
     # Setup Global Variables based from
