@@ -13,7 +13,6 @@ def Setup():
     with open("data/mcRecipes.txt") as mcRecipesFile:
         mcRecipes = mcRecipesFile.read().split('\n')
     
-
     # Setup Global Variables based from
     global packsMaster
     packsMaster = []
@@ -313,8 +312,8 @@ def createArchive(datapack):
     
     vprint("Creating Archive:", datapack + ".zip")
     outFolder = "Separate Datapacks/" if datapack != "extended_combined" else ""
-    releaseOut = '' if args.release == "" else "v" + args.release + " "
-    shutil.make_archive(outFolder + releaseOut + datapack + " " + args.mcversion + "+", 'zip', "data/outData/" + datapack)
+    releaseOut = '' if args.release == "" else "v" + args.release + "_"
+    shutil.make_archive(outFolder + releaseOut + datapack + "_" + args.mcversion + "+", 'zip', "data/outData/" + datapack)
 
 Setup()
 print("---------  Complete!  ---------")
