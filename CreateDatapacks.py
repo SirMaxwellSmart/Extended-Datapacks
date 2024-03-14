@@ -97,7 +97,7 @@ def main():
                     print("Error in data/datapackTypes.csv")
                     sys.exit(1)
 
-        vprint("Recipe generation completed in", f'{time.time() - timer: .3}', "s")
+        vprint("Recipe generation completed in", f'{time.time() - timer:.3}', "s")
 
     if separatedOutput or combinedOutput: # Begin Datapack Creation
         vprint("------ Begin Datapack Creation ------")
@@ -121,7 +121,7 @@ def main():
             os.makedirs("data/outData/extended_combined", exist_ok=True)
             for datapack in packs:
                 packTransfer(datapack, "extended_combined")
-        vprint("Transfers completed in:", f'{time.time() - timer: .3}', "s")
+        vprint("Transfers completed in:", f'{time.time() - timer:.3}', "s")
 
     if args.noarchive == False:
         vprint("------ Begin Archive Creation ------")
@@ -132,7 +132,7 @@ def main():
 
         if combinedOutput:
             createArchive("extended_combined")
-        vprint("Archiving completed in:", f'{time.time() - timer: .3}', "s")
+        vprint("Archiving completed in:", f'{time.time() - timer:.3}', "s")
 
 
 def craftingGen(datapack, uncraft = False):
@@ -167,7 +167,7 @@ def craftingGen(datapack, uncraft = False):
         with open("data/genData/" + datapack + "/" + recipeName + ".json", 'w') as recipe:
             recipe.write(tempRecipe)
 
-    vprint("Finished in:", f'{time.time() - timer: .3}', "s")
+    vprint("Finished in:", f'{time.time() - timer:.3}', "s")
 
 
 def smeltingGen(datapack):
@@ -239,7 +239,7 @@ def smeltingGen(datapack):
             with open("data/genData/" + datapack + "/" + row["output"] + "_from_smoking_" + row["input"] + ".json", 'w') as recipe:
                 recipe.write(tempRecipe)
 
-    vprint("Finished in:", f'{time.time() - timer: .3}', "s")
+    vprint("Finished in:", f'{time.time() - timer:.3}', "s")
 
 
 def stonecuttingGen(datapack):
@@ -286,23 +286,25 @@ def stonecuttingGen(datapack):
                                 with open("data/genData/" + datapack + "/" + fileName + ".json", 'w') as recipe:
                                     recipe.write(tempRecipe)
 
-    vprint("Finished in:", f'{time.time() - timer: .3}', "s")
+    vprint("Finished in:", f'{time.time() - timer:.3}', "s")
 
 
 def packTransfer(inDatapack, outDatapack):
     vprint("Transferring:", inDatapack, "->", outDatapack)
 
-    if master[inDatapack] == "directCopy":
+    if master[inDatapack] == "direct_copy":
         shutil.copytree("data/packsData/" + inDatapack, "data/outData/" + outDatapack + "/data/minecraft", dirs_exist_ok = True)
 
     else:
         datapackRecipes = os.listdir("data/genData/" + inDatapack)
-        os.makedirs("data/outData/" + outDatapack + "/data/minecraft/recipes", exist_ok=True)
-        os.makedirs("data/outData/" + outDatapack + "/data/" + inDatapack + "/recipes", exist_ok=True)
+        os.makedirs("data/outData/" + outDatapack + "/data/minecraft/recipes", exist_ok = True)
+        os.makedirs("data/outData/" + outDatapack + "/data/" + inDatapack + "/recipes", exist_ok = True)
 
         for recipe in datapackRecipes:
             if recipe in mcRecipes:
-                shutil.copy("data/genData/" + inDatapack + "/" + recipe, "data/outData/" + outDatapack + "/data/minecraft/recipes")
+                if master[inDatapack] == "true":
+                    shutil.copy("data/genData/" + inDatapack + "/" + recipe, "data/outData/" + outDatapack + "/data/minecraft/recipes")
+                else: pass
             else:
                 shutil.copy("data/genData/" + inDatapack + "/" + recipe, "data/outData/" + outDatapack + "/data/" + inDatapack + "/recipes")
 
@@ -325,5 +327,5 @@ def createArchive(datapack):
 
 globalTimer = time.time()
 Setup()
-vprint("------ Completed in", f'{time.time() - globalTimer: .3}', "seconds! ------")
+vprint("------ Completed in", f'{time.time() - globalTimer:.3}', "seconds! ------")
 if not args.verbose: print("---------  Complete!  ---------")

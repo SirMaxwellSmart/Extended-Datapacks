@@ -173,6 +173,7 @@ chiseled_sandstone.json
 chiseled_stone_bricks_from_stone_bricks_stonecutting.json
 chiseled_stone_bricks.json
 chiseled_stone_bricks_stone_from_stonecutting.json
+chiseled_stone_bricks_from_stone_stonecutting.json
 chiseled_tuff_bricks_from_polished_tuff_stonecutting.json
 chiseled_tuff_bricks_from_tuff_bricks_stonecutting.json
 chiseled_tuff_bricks_from_tuff_stonecutting.json
@@ -1068,6 +1069,7 @@ stone_brick_stairs.json
 stone_brick_wall_from_stone_bricks_stonecutting.json
 stone_brick_wall.json
 stone_brick_walls_from_stone_stonecutting.json
+stone_brick_wall_from_stone_stonecutting.json
 stone_button.json
 stonecutter.json
 stone_hoe.json
