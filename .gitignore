@@ -1,6 +1,7 @@
 *.code-workspace
 *.zip
 *.jar
+*test*
 data/outData/*
 data/genData/*
 Datapacks Output/*
