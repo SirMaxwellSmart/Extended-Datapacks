@@ -3,48 +3,17 @@ import csv
 import os
 import shutil
 import sys
+import time
 
-# Set CWD to that of the script
-os.chdir(os.path.dirname(os.path.realpath(__file__))) 
 
 def Setup():
-    global mcRecipes
-    with open("data/mcrecipes.txt") as mcRecipesFile:
-        mcRecipes = mcRecipesFile.read()
-    
-
-    # Setup Global Variables based from
-    global packsMaster
-    packsMaster = []
-    global craftingPacks
-    craftingPacks = []
-    global directCopyPacks
-    directCopyPacks = []
-    global smeltingPacks
-    smeltingPacks = []
-    global stonecuttingPacks
-    stonecuttingPacks = []
-    global uncraftingPacks
-    uncraftingPacks = []
-
-    with open("data/datapackTypes.csv", 'r') as datapackTypes:
-        data = csv.DictReader(datapackTypes)
-        for row in data:
-            packsMaster.append(row["datapack"])
-            match row["type"]:
-                case "crafting":
-                    craftingPacks.append(row["datapack"])
-                case "direct_copy":
-                    directCopyPacks.append(row["datapack"])
-                case "smelting":
-                    smeltingPacks.append(row["datapack"])
-                case "stonecutting":
-                    stonecuttingPacks.append(row["datapack"])
-                case "uncrafting":
-                    uncraftingPacks.append(row["datapack"])
-                case _:
-                    print("Error in datapackTypes.csv")
-                    sys.exit(1)
+    # Setup master packs and types list
+    with open("data/datapackTypes.csv", 'r') as datapackTypesFile:
+        datapackTypes = csv.DictReader(datapackTypesFile)
+        global master
+        master = {}
+        for row in datapackTypes:
+            master[row["datapack"]] = {"type": row["type"], "overwritemc": row["overwritemc"]}
 
     # Argument Parser Setup
     parser = argparse.ArgumentParser(
@@ -53,88 +22,123 @@ def Setup():
         epilog = "Created by SirMaxwellSmart (Isaac Beel)"
     )
 
-    parser.add_argument("packs", nargs = '*', choices = packsMaster + ['all'], default = 'all', help = "List all of the packs you wish to generate. Leave blank for all")
-    parser.add_argument("-ng", "--nogen", action = 'store_true', help = "If present, will not regenerate but only repackage previously generated recipes")
-    parser.add_argument("-nt", "--notransfer", action = 'store_true', help = "If present, will generate recipes in data folders, but not package into datapack")
-    parser.add_argument("-s", "--seperate", action = 'store_true', help = "Generate seperate outData instead of generating a single combined pack")
+    parser.add_argument("packs", nargs = '*', choices = list(master.keys()) + ['all'], default = 'all', help = "List all of the packs you wish to generate.")
+    parser.add_argument("-ng", "--nogen", action = 'store_true', help = "If present, will not regenerate but only repackage previously generated recipes.")
+    parser.add_argument("-na", "--noarchive", action = 'store_true', help = "If present, will not archive the datapacks, but leave them as direcoties in the dataOut folder.")
+    parser.add_argument("-p", "--package", nargs = '*', choices = ["c", "combined", "s", "separated"], default = 'combined', help = "Generate a single combined datapack.")
+    parser.add_argument("-r", "--release", default = "", help = "Specify an internal version number to prefix datapack name.")
+    parser.add_argument("-mc", "--mcversion", default = "1.20", help = "Specify MC version to suffix to name.")
+    parser.add_argument("-pf", "--packformat", default = "23", help = "Specify Pack Format for the pack.mcmeta to display.")
+    parser.add_argument("-pr", "--packrange", default = "23,34", help = "Specify the Pack Format range (n,n) for the pack.mcmeta to display.")
     parser.add_argument("-v", "--verbose", action = 'store_true')
     global args
     args = parser.parse_args()
 
-    # Setup vprint for verbose mode
+    global combinedOutput
+    combinedOutput = False
+    global separatedOutput
+    separatedOutput = False
+    for arg in args.package:
+        if arg in ["c", "combined"]:
+            combinedOutput = True
+        elif arg in ["s", "separated"]:
+            separatedOutput = True
+
+    # Setup vprint and timer for verbose mode
     global vprint
+    global timerStart
     vprint = print if args.verbose else lambda *a, **k: None
-    vprint("NoGen:", args.nogen,"| NoTransfer:", args.notransfer, "| Seperate:", args.seperate, "| Verbose:", args.verbose) # Print options
+    timerStart = time.time if args.verbose else lambda: None
+
+    vprint("NoGen:", args.nogen,"\nNoArchive:", args.noarchive, "\nCombined Output:", combinedOutput, "\nSeparated Ouput:", separatedOutput, "\nRelease No.:", args.release, "\nMC Version:", args.mcversion, "\nPack Format:", args.packformat, "\nPack Range:", args.packrange, "\nVerbose:", args.verbose) # Print options
+
+    # Set CWD to that of the script
+    vprint("Setting \"Current Working Directory\" to script directory")
+    os.chdir(os.path.dirname(os.path.realpath(__file__)))
+
+    # Import mcRecipes.txt
+    vprint("Importing mcRecipes.txt")
+    global mcRecipes
+    with open("data/mcRecipes.txt") as mcRecipesFile:
+        mcRecipes = mcRecipesFile.read().split('\n')
+
+    global packs
+    packs = []
+    if 'all' in args.packs:
+        packs = list(master.keys()) # Set packs to packMaster.complete if all is selected
+    else:
+        packs = args.packs # Set packs to arguments provided if all not selected
+    vprint("Chosen Packs:", packs)
 
     main()
 
+
 def main():
-    packs = []
-    if 'all' in args.packs:
-        packs = packsMaster # Set packs to packMaster if all is selected
-    else:
-        packs = args.packs # Set packs to arguments provided if all not selected
-        if len(packs) == 1:
-            args.seperate = True
-    vprint("Chosen Packs:", packs)
-
     if args.nogen == False: # Gen Packs
-        shutil.rmtree("data/genData/", ignore_errors=True)
-        os.makedirs("data/genData/", exist_ok=True)
-
+        vprint("------ Begin Recipe Generation ------")
+        timer = timerStart()
         for datapack in packs:
-            if datapack in craftingPacks:
-                vprint("CraftingGen:", datapack)
-                craftingGen(datapack)
-            elif datapack in uncraftingPacks:
-                vprint("UncraftingGen:", datapack)
-                craftingGen(datapack, True)
-            elif datapack in stonecuttingPacks:
-                vprint("StonecuttingGen:", datapack)
-                stonecuttingGen(datapack)
-            elif datapack in smeltingPacks:
-                vprint("SmeltingGen:", datapack)
-                smeltingGen(datapack)
+            vprint("Clearing Old Data in genData:", datapack)
+            shutil.rmtree("data/genData/" + datapack, ignore_errors=True)
+            os.makedirs("data/genData/" + datapack, exist_ok=True)
 
-    if args.notransfer == False:
-        vprint("Clearing old folders in outData folder")
-        shutil.rmtree("data/outData/", ignore_errors=True)
-        os.makedirs("data/outData/", exist_ok=True)
+            match master[datapack]["type"]:
+                case "crafting":
+                    craftingGen(datapack)
+                case "direct_copy":
+                    pass
+                case "smelting":
+                    smeltingGen(datapack)
+                case "stonecutting":
+                    stonecuttingGen(datapack)
+                case "uncrafting":
+                    craftingGen(datapack, True)
+                case _:
+                    print("Error in data/datapackTypes.csv")
+                    sys.exit(1)
 
-        for datapack in packs:
-            vprint("Transferring:", datapack)
-            packTransfer(datapack)
+        vprint("Recipe generation completed in", f'{time.time() - timer:.3}', "s")
+
+    if separatedOutput or combinedOutput: # Begin Datapack Creation
+        vprint("------ Begin Datapack Creation ------")
+        timer = timerStart()
 
         with open("data/templatePack.mcmeta", 'r') as mcmetaTemplateFile:
+            global mcmetaTemplate
             mcmetaTemplate = mcmetaTemplateFile.read()
-        
-        vprint("Ensuring Ouput folder Exists")
-        os.makedirs("Datapacks Output", exist_ok=True)
 
-        if args.seperate:
-            
+        if separatedOutput:
             for datapack in packs:
-                mcmetaTemp = mcmetaTemplate
-                mcmetaTemp = mcmetaTemp.replace("DESCRIPTION", str(datapack))
+                vprint("Clearing", datapack, "in outData folder")
+                shutil.rmtree("data/outData/" + datapack, ignore_errors=True)
+                os.makedirs("data/outData/" + datapack, exist_ok=True)
+            
+                packTransfer(datapack, datapack)
 
-                with open("data/outData/" + datapack + "/pack.mcmeta", 'w') as mcmeta:
-                    mcmeta.write(mcmetaTemp)
-                
-                vprint("Creating Zip:", datapack + ".zip")
-                shutil.make_archive("Datapacks Output/" + datapack, 'zip', "data/outData/" + datapack)
+        if combinedOutput:
+            vprint("Clearing extended_combined in outData folder")
+            shutil.rmtree("data/outData/extended_combined", ignore_errors=True)
+            os.makedirs("data/outData/extended_combined", exist_ok=True)
+            for datapack in packs:
+                packTransfer(datapack, "extended_combined")
+        vprint("Transfers completed in:", f'{time.time() - timer:.3}', "s")
 
-        else:
-            mcmetaTemp = mcmetaTemplate
-            mcmetaTemp = mcmetaTemp.replace("DESCRIPTION", "Combined Packs: " + str(packsMaster))
+    if args.noarchive == False:
+        vprint("------ Begin Archive Creation ------")
+        timer = timerStart()
+        if separatedOutput:
+            for datapack in packs:
+                createArchive(datapack)
 
-            with open("data/outData/extended_combined/pack.mcmeta", 'w') as mcmeta:
-                mcmeta.write(mcmetaTemp)
-
-            vprint("Creating Zip: extended_combined.zip")
-            shutil.make_archive("Datapacks Output/extended_combined", 'zip', "data/outData/extended_combined")
+        if combinedOutput:
+            createArchive("extended_combined")
+        vprint("Archiving completed in:", f'{time.time() - timer:.3}', "s")
 
 
 def craftingGen(datapack, uncraft = False):
+    timer = timerStart()
+    vprint("Generating Recipes:", datapack)
+    
     shutil.rmtree("data/genData/" + datapack, ignore_errors=True)
     os.makedirs("data/genData/" + datapack, exist_ok=True)
 
@@ -147,8 +151,6 @@ def craftingGen(datapack, uncraft = False):
     with open("data/packsData/" + datapack + "/template.json") as templateFile:
         template = templateFile.read()
 
-    vprint("Template File:")
-    vprint(template)
     for row in data:
 
         tempRecipe = template
@@ -165,7 +167,13 @@ def craftingGen(datapack, uncraft = False):
         with open("data/genData/" + datapack + "/" + recipeName + ".json", 'w') as recipe:
             recipe.write(tempRecipe)
 
+    vprint("Finished in:", f'{time.time() - timer:.3}', "s")
+
+
 def smeltingGen(datapack):
+    timer = timerStart()
+    vprint("Generating Recipes:", datapack)
+
     shutil.rmtree("data/genData/" + datapack, ignore_errors=True)
     os.makedirs("data/genData/" + datapack, exist_ok=True)
 
@@ -178,8 +186,6 @@ def smeltingGen(datapack):
     with open("data/packsData/" + datapack + "/template.json") as templateFile:
         template = templateFile.read()
 
-    vprint("Template File:")
-    vprint(template)
     for row in data:
         # Furnace Recipe
         if "f" in row["smeltTypes"]:
@@ -233,7 +239,13 @@ def smeltingGen(datapack):
             with open("data/genData/" + datapack + "/" + row["output"] + "_from_smoking_" + row["input"] + ".json", 'w') as recipe:
                 recipe.write(tempRecipe)
 
+    vprint("Finished in:", f'{time.time() - timer:.3}', "s")
+
+
 def stonecuttingGen(datapack):
+    timer = timerStart()
+    vprint("Generating Recipes:", datapack)
+
     shutil.rmtree("data/genData/" + datapack, ignore_errors=True)
     os.makedirs("data/genData/" + datapack, exist_ok=True)
 
@@ -247,8 +259,8 @@ def stonecuttingGen(datapack):
         template = templateFile.read()
 
     groups = set()
-    for i in data:
-        groups.add(i["group"])
+    for row in data:
+        groups.add(row["group"])
 
     for group in groups:
         tempList = []
@@ -272,29 +284,48 @@ def stonecuttingGen(datapack):
                                 tempRecipe = tempRecipe.replace('OUTPUT', output)
                                 tempRecipe = tempRecipe.replace('COUNT', count)
                                 with open("data/genData/" + datapack + "/" + fileName + ".json", 'w') as recipe:
-                                    recipe.write(tempRecipe) 
+                                    recipe.write(tempRecipe)
 
-def packTransfer(namespace):
-    if args.seperate:
-        datapack = namespace
+    vprint("Finished in:", f'{time.time() - timer:.3}', "s")
+
+
+def packTransfer(inDatapack, outDatapack):
+    vprint("Transferring:", inDatapack, "->", outDatapack)
+
+    if master[inDatapack] == "direct_copy":
+        shutil.copytree("data/packsData/" + inDatapack, "data/outData/" + outDatapack + "/data/minecraft", dirs_exist_ok = True)
+
     else:
-        datapack = "extended_combined"
-
-    if namespace in directCopyPacks:
-        shutil.copytree("data/packsData/" + namespace, "data/outData/" + datapack + "/data/minecraft", dirs_exist_ok = True)
-
-    else:
-        datapackRecipes = os.listdir("data/genData/" + namespace)
-        os.makedirs("data/outData/" + datapack + "/data/minecraft/recipes", exist_ok=True)
-        os.makedirs("data/outData/" + datapack + "/data/" + namespace + "/recipes", exist_ok=True)
+        datapackRecipes = os.listdir("data/genData/" + inDatapack)
+        os.makedirs("data/outData/" + outDatapack + "/data/minecraft/recipes", exist_ok = True)
+        os.makedirs("data/outData/" + outDatapack + "/data/" + inDatapack + "/recipes", exist_ok = True)
 
         for recipe in datapackRecipes:
-            # vprint("Namespace:", namespace, "Datapack:", datapack, "Recipe:", recipe)
-
             if recipe in mcRecipes:
-                shutil.copy("data/genData/" + namespace + "/" + recipe, "data/outData/" + datapack + "/data/minecraft/recipes")
+                if master[inDatapack]["overwritemc"] == "true":
+                    shutil.copy("data/genData/" + inDatapack + "/" + recipe, "data/outData/" + outDatapack + "/data/minecraft/recipes")
+                else: pass
             else:
-                shutil.copy("data/genData/" + namespace + "/" + recipe, "data/outData/" + datapack + "/data/" + namespace + "/recipes")
+                shutil.copy("data/genData/" + inDatapack + "/" + recipe, "data/outData/" + outDatapack + "/data/" + inDatapack + "/recipes")
 
+    mcmetaTemp = mcmetaTemplate
+    mcmetaTemp = mcmetaTemp.replace("PACKFORMAT", args.packformat)
+    mcmetaTemp = mcmetaTemp.replace("PACKRANGE", "[" + args.packrange + "]")
+    mcmetaTemp = mcmetaTemp.replace("DESCRIPTION", "Combined Packs: " + str(packs) if outDatapack == "extended_combined" else outDatapack)
+
+    with open("data/outData/" + outDatapack + "/pack.mcmeta", 'w') as mcmeta:
+        mcmeta.write(mcmetaTemp)
+
+
+def createArchive(datapack):
+    vprint("Creating Archive:", datapack + ".zip")
+    
+    outFolder = "Separate Datapacks/" if datapack != "extended_combined" else ""
+    releaseOut = '' if args.release == "" else "v" + args.release + "_"
+    shutil.make_archive(outFolder + releaseOut + datapack + "_" + args.mcversion + "+", 'zip', "data/outData/" + datapack)
+
+
+globalTimer = time.time()
 Setup()
-print("---------  Complete!  ---------")
+vprint("------ Completed in", f'{time.time() - globalTimer:.3}', "seconds! ------")
+if not args.verbose: print("---------  Complete!  ---------")
