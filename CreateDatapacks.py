@@ -13,7 +13,7 @@ def Setup():
         global master
         master = {}
         for row in datapackTypes:
-            master[row["datapack"]] = row["type"]
+            master[row["datapack"]] = {"type": row["type"], "overwritemc": row["overwritemc"]}
 
     # Argument Parser Setup
     parser = argparse.ArgumentParser(
@@ -82,7 +82,7 @@ def main():
             shutil.rmtree("data/genData/" + datapack, ignore_errors=True)
             os.makedirs("data/genData/" + datapack, exist_ok=True)
 
-            match master[datapack]:
+            match master[datapack]["type"]:
                 case "crafting":
                     craftingGen(datapack)
                 case "direct_copy":
@@ -302,7 +302,7 @@ def packTransfer(inDatapack, outDatapack):
 
         for recipe in datapackRecipes:
             if recipe in mcRecipes:
-                if master[inDatapack] == "true":
+                if master[inDatapack]["overwritemc"] == "true":
                     shutil.copy("data/genData/" + inDatapack + "/" + recipe, "data/outData/" + outDatapack + "/data/minecraft/recipes")
                 else: pass
             else:
