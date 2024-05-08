@@ -27,7 +27,7 @@ def Setup():
     parser.add_argument("-na", "--noarchive", action = 'store_true', help = "If present, will not archive the datapacks, but leave them as direcoties in the dataOut folder.")
     parser.add_argument("-p", "--package", nargs = '*', choices = ["c", "combined", "s", "separated"], default = 'combined', help = "Generate a single combined datapack.")
     parser.add_argument("-r", "--release", default = "", help = "Specify an internal version number to prefix datapack name.")
-    parser.add_argument("-mc", "--mcversion", default = "1.20", help = "Specify MC version to suffix to name.")
+    parser.add_argument("-mc", "--mcversion", default = "1.21", help = "Specify MC version to suffix to name.")
     parser.add_argument("-pf", "--packformat", default = "23", help = "Specify Pack Format for the pack.mcmeta to display.")
     parser.add_argument("-pr", "--packrange", default = "23,34", help = "Specify the Pack Format range (n,n) for the pack.mcmeta to display.")
     parser.add_argument("-v", "--verbose", action = 'store_true')
