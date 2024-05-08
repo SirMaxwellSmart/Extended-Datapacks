@@ -46,9 +46,7 @@ def Setup():
 
     # Setup vprint and timer for verbose mode
     global vprint
-    global timerStart
     vprint = print if args.verbose else lambda *a, **k: None
-    timerStart = time.time if args.verbose else lambda: None
 
     vprint("NoGen:", args.nogen,"\nNoArchive:", args.noarchive, "\nCombined Output:", combinedOutput, "\nSeparated Ouput:", separatedOutput, "\nRelease No.:", args.release, "\nMC Version:", args.mcversion, "\nPack Format:", args.packformat, "\nPack Range:", args.packrange, "\nVerbose:", args.verbose) # Print options
 
@@ -75,8 +73,8 @@ def Setup():
 
 def main():
     if args.nogen == False: # Gen Packs
+        timer = time.time()
         vprint("------ Begin Recipe Generation ------")
-        timer = timerStart()
         for datapack in packs:
             vprint("Clearing Old Data in genData:", datapack)
             shutil.rmtree("data/genData/" + datapack, ignore_errors=True)
@@ -100,8 +98,8 @@ def main():
         vprint("Recipe generation completed in", f'{time.time() - timer:.2f}', "s")
 
     if separatedOutput or combinedOutput: # Begin Datapack Creation
+        timer = time.time()
         vprint("------ Begin Datapack Creation ------")
-        timer = timerStart()
 
         with open("data/templatePack.mcmeta", 'r') as mcmetaTemplateFile:
             global mcmetaTemplate
@@ -125,7 +123,7 @@ def main():
 
     if args.noarchive == False:
         vprint("------ Begin Archive Creation ------")
-        timer = timerStart()
+        timer = time.time()
         if separatedOutput:
             for datapack in packs:
                 createArchive(datapack)
@@ -136,7 +134,7 @@ def main():
 
 
 def craftingGen(datapack, uncraft = False):
-    timer = timerStart()
+    timer = time.time()
     vprint("Generating Recipes:", datapack)
     
     shutil.rmtree("data/genData/" + datapack, ignore_errors=True)
@@ -171,7 +169,7 @@ def craftingGen(datapack, uncraft = False):
 
 
 def smeltingGen(datapack):
-    timer = timerStart()
+    timer = time.time()
     vprint("Generating Recipes:", datapack)
 
     shutil.rmtree("data/genData/" + datapack, ignore_errors=True)
@@ -243,7 +241,7 @@ def smeltingGen(datapack):
 
 
 def stonecuttingGen(datapack):
-    timer = timerStart()
+    timer = time.time()
     vprint("Generating Recipes:", datapack)
 
     shutil.rmtree("data/genData/" + datapack, ignore_errors=True)
