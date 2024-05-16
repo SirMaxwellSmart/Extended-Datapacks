@@ -26,10 +26,10 @@ def Setup():
     parser.add_argument("-ng", "--nogen", action = 'store_true', help = "If present, will not regenerate but only repackage previously generated recipes.")
     parser.add_argument("-na", "--noarchive", action = 'store_true', help = "If present, will not archive the datapacks, but leave them as direcoties in the dataOut folder.")
     parser.add_argument("-p", "--package", nargs = '*', choices = ["c", "combined", "s", "separated"], default = 'combined', help = "Generate a single combined datapack.")
-    parser.add_argument("-r", "--release", default = "", help = "Specify an internal version number to prefix datapack name.")
+    parser.add_argument("-r", "--release", default = "Dev", help = "Specify an internal version number to prefix datapack name.")
     parser.add_argument("-mc", "--mcversion", default = "1.21", help = "Specify MC version to suffix to name.")
     parser.add_argument("-pf", "--packformat", default = "41", help = "Specify Pack Format for the pack.mcmeta to display.")
-    parser.add_argument("-pr", "--packrange", default = "34,41", help = "Specify the Pack Format range (n,n) for the pack.mcmeta to display.")
+    parser.add_argument("-pr", "--packrange", default = "34,50", help = "Specify the Pack Format range (n,n) for the pack.mcmeta to display.")
     parser.add_argument("-v", "--verbose", action = 'store_true')
     global args
     args = parser.parse_args()
@@ -74,7 +74,7 @@ def Setup():
 def main():
     if args.nogen == False: # Gen Packs
         timer = time.time()
-        vprint("------ Begin Recipe Generation ------")
+        print("------ Begin Recipe Generation ------")
         for datapack in packs:
             vprint("Clearing Old Data in genData:", datapack)
             shutil.rmtree("data/genData/" + datapack, ignore_errors=True)
@@ -99,7 +99,7 @@ def main():
 
     if separatedOutput or combinedOutput: # Begin Datapack Creation
         timer = time.time()
-        vprint("------ Begin Datapack Creation ------")
+        print("------ Begin Datapack Creation ------")
 
         with open("data/templatePack.mcmeta", 'r') as mcmetaTemplateFile:
             global mcmetaTemplate
@@ -122,7 +122,7 @@ def main():
         vprint("Transfers completed in:", f'{time.time() - timer:.2f}', "s")
 
     if args.noarchive == False:
-        vprint("------ Begin Archive Creation ------")
+        print("------ Begin Archive Creation ------")
         timer = time.time()
         if separatedOutput:
             for datapack in packs:
