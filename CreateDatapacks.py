@@ -290,7 +290,7 @@ def stonecuttingGen(datapack):
 def packTransfer(inDatapack, outDatapack):
     vprint("Transferring:", inDatapack, "->", outDatapack)
 
-    if master[inDatapack] == "direct_copy":
+    if master[inDatapack]["type"] == "direct_copy":
         shutil.copytree("data/packsData/" + inDatapack, "data/outData/" + outDatapack + "/data/minecraft", dirs_exist_ok = True)
 
     else:
