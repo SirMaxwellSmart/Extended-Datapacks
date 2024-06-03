@@ -13,6 +13,6 @@
   ],
   "result": {
     "count": COUNT,
-    "item": "minecraft:OUTPUT"
+    "id": "minecraft:OUTPUT"
   }
 }

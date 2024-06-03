@@ -11,11 +11,4 @@ bamboo_door,bamboo_planks,wooden_doors,4
 crimson_door,crimson_planks,wooden_doors,4
 warped_door,warped_planks,wooden_doors,4
 iron_door,iron_ingot,iron_door,4
-copper_door,copper_block,copper_door,4
-exposed_copper_door,exposed_copper,exposed_copper_door,4
-weathered_copper_door,weathered_copper,weathered_copper_door,4
-oxidized_copper_door,oxidized_copper,oxidized_copper_door,4
-waxed_copper_door,waxed_copper_block,waxed_copper_door,4
-waxed_exposed_copper_door,waxed_exposed_copper,waxed_exposed_copper_door,4
-waxed_weathered_copper_door,waxed_weathered_copper,waxed_weathered_copper_door,4
-waxed_oxidized_copper_door,waxed_oxidized_copper,waxed_oxidized_copper_door,4
+copper_door,copper_ingot,copper_door,4

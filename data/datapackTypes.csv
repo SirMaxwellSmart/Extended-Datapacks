@@ -2,10 +2,8 @@ datapack,type,overwritemc
 carpets_extended,crafting,true
 doors_extended,crafting,true
 hanging_signs_extended,crafting,true
-husk_sand_extended,direct_copy
 misc_crafting_extended,direct_copy,true
 signs_extended,crafting,true
-silverfish_gravel_extended,direct_copy
 slabs_extended,uncrafting
 smelt_raw_extended,smelting
 stairs_extended,crafting,true

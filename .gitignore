@@ -1,6 +1,7 @@
 *.code-workspace
 *.zip
 *.jar
+*.lnk
 *test*
 data/outData/*
 data/genData/*
