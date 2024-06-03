@@ -75,13 +75,5 @@ Inspiration began with wish to be able to go "backwards" with the stonecutter, a
 - Smelting also takes 9x time and fuel.
 
 ---
-
-**13. Husks Drop Sand Extended**
-- Adds sand as a loot roll to husks when killed by a player.
-- Allows infinitely renewable sand.
-
----
-
-**14. Silverfish Drop Gravel Extended**
-- Adds gravel as a loot roll to silverfish when killed by a player.
-- Allows infinitely renewable gravel.
+**__Future Plans__**
+- Redye Blocks 8x (Glass, Glass Panes, Terracotta, Wool, Carpet, Concrete Powder)
