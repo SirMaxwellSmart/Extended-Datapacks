@@ -320,7 +320,7 @@ def createArchive(datapack):
     
     outFolder = "Separate Datapacks/" if datapack != "extended_combined" else ""
     releaseOut = '' if args.release == "" else "v" + args.release + "_"
-    shutil.make_archive(outFolder + datapack + "_" + releaseOut + "mc" + args.mcversion + "+", 'zip', "data/outData/" + datapack)
+    shutil.make_archive(outFolder + datapack + "_" + releaseOut + "mc" + args.mcversion, 'zip', "data/outData/" + datapack)
 
 
 globalTimer = time.time()
