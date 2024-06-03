@@ -28,8 +28,8 @@ def Setup():
     parser.add_argument("-p", "--package", nargs = '*', choices = ["c", "combined", "s", "separated"], default = 'combined', help = "Generate a single combined datapack.")
     parser.add_argument("-r", "--release", default = "Dev", help = "Specify an internal version number to prefix datapack name.")
     parser.add_argument("-mc", "--mcversion", default = "1.21", help = "Specify MC version to suffix to name.")
-    parser.add_argument("-pf", "--packformat", default = "41", help = "Specify Pack Format for the pack.mcmeta to display.")
-    parser.add_argument("-pr", "--packrange", default = "34,50", help = "Specify the Pack Format range (n,n) for the pack.mcmeta to display.")
+    parser.add_argument("-pf", "--packformat", default = "47", help = "Specify Pack Format for the pack.mcmeta to display.")
+    parser.add_argument("-pr", "--packrange", default = "45,47", help = "Specify the Pack Format range (n,n) for the pack.mcmeta to display.")
     parser.add_argument("-v", "--verbose", action = 'store_true')
     global args
     args = parser.parse_args()
