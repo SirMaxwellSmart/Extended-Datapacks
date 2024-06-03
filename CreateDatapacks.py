@@ -295,16 +295,16 @@ def packTransfer(inDatapack, outDatapack):
 
     else:
         datapackRecipes = os.listdir("data/genData/" + inDatapack)
-        os.makedirs("data/outData/" + outDatapack + "/data/minecraft/recipes", exist_ok = True)
-        os.makedirs("data/outData/" + outDatapack + "/data/" + inDatapack + "/recipes", exist_ok = True)
+        os.makedirs("data/outData/" + outDatapack + "/data/minecraft/recipe", exist_ok = True)
+        os.makedirs("data/outData/" + outDatapack + "/data/" + inDatapack + "/recipe", exist_ok = True)
 
         for recipe in datapackRecipes:
             if recipe in mcRecipes:
                 if master[inDatapack]["overwritemc"] == "true":
-                    shutil.copy("data/genData/" + inDatapack + "/" + recipe, "data/outData/" + outDatapack + "/data/minecraft/recipes")
+                    shutil.copy("data/genData/" + inDatapack + "/" + recipe, "data/outData/" + outDatapack + "/data/minecraft/recipe")
                 else: pass
             else:
-                shutil.copy("data/genData/" + inDatapack + "/" + recipe, "data/outData/" + outDatapack + "/data/" + inDatapack + "/recipes")
+                shutil.copy("data/genData/" + inDatapack + "/" + recipe, "data/outData/" + outDatapack + "/data/" + inDatapack + "/recipe")
 
     mcmetaTemp = mcmetaTemplate
     mcmetaTemp = mcmetaTemp.replace("PACKFORMAT", args.packformat)
